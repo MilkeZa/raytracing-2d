@@ -1,14 +1,14 @@
 using UnityEngine;
 
 /// <summary>
-/// This class handles player movement.
+/// This class manages player movement by turning keyboard input into on-screen movement.
 /// </summary>
 public class Movement : MonoBehaviour
 {
-    private float _moveSpeed, _rotateSpeed;
-    private float _hMovement, _vMovement;
-    private Vector3 _tempVect;
-    private bool _isRotating;
+    private float _moveSpeed;   // How fast the player translates.
+    private float _rotateSpeed; // How fast the player rotates.
+    private float _hMovement, _vMovement; // How fast the player moves vertically (U/D) and horizontally (L/R).
+    private bool _isRotating; // Indicates whether the player is actively moving or not.
 
     /// <summary>
     /// Set player movement speeds.
@@ -28,27 +28,17 @@ public class Movement : MonoBehaviour
         _hMovement = Input.GetAxisRaw("Horizontal");
         _vMovement = Input.GetAxisRaw("Vertical");
 
-        // Determine if rotating.
-        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E))
-        {
-            // Q or/and E are pressed, player is rotating.
-            _isRotating = true;
-        }
-        else
-        {
-            // Player is not rotating.
-            _isRotating = false;
-        }
+        // Determine if rotating. By checking if the Q or E buttons are down.
+        _isRotating = Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) ? true : false;
     }
 
     private void FixedUpdate()
     {
-        // Create a temporary vector determining where player is to move to.
-        _tempVect = new Vector3(_hMovement, _vMovement, 0f);
-        _tempVect = _tempVect.normalized * _moveSpeed * Time.deltaTime;
+        // Create a temporary vector determining where player is to move to. Add it to players current position.
+        Vector3 _tempVect = new Vector3(_hMovement, _vMovement, 0f).normalized * _moveSpeed * Time.deltaTime;
         transform.position += _tempVect;
 
-        // Manage rotational movement.
+        // Manage rotational movement, if any.
         if (_isRotating)
         {
             if (Input.GetKey(KeyCode.Q))
@@ -56,7 +46,7 @@ public class Movement : MonoBehaviour
                 // Rotate counter-clockwise.
                 transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
             }
-            
+
             if (Input.GetKey(KeyCode.E))
             {
                 // Rotate clockwise.

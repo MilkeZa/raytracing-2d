@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This class handles the physics of the rays being cast out.
+/// This class handles the physics and interactions of the rays being cast out.
 /// </summary>
 public class Raycaster : MonoBehaviour
 {
-    private int _rayCount; // Number of rays cast out.
+    private int _rayCount;      // Number of rays cast out.
     private float _fieldOfView; // Total field of view.
     private float _offsetAngle; // Angle between each ray.
 
     /// <summary>
     /// Set the class variables.
     /// </summary>
-    /// <param name="rayCount">How many rays are being cast out.</param>
+    /// <param name="rayCount">Number of individual rays being cast.</param>
     /// <param name="fieldOfView">FOV of the player. Total angle rays are to be cast out to.</param>
     public void SetVariables(int rayCount, float fieldOfView)
     {
@@ -25,9 +25,9 @@ public class Raycaster : MonoBehaviour
     /// <summary>
     /// Determine the offset to be put between each ray.
     /// </summary>
-    /// <param name="rayCount">How many rays are being cast out.</param>
-    /// <param name="fieldOfView">FOV of the player. Total angle rays are to be cast out to.</param>
-    /// <returns></returns>
+    /// <param name="rayCount">Number of individual rays being cast.</param>
+    /// <param name="fieldOfView">FOV of the player.</param>
+    /// <returns>Float representing offset between each raycast.</returns>
     private float CalculateOffestAngle(int rayCount, float fieldOfView)
     {
         // Divide FOV by raycount to get offset.
@@ -35,10 +35,9 @@ public class Raycaster : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculate the directions to shoot each ray in using quaternions.
+    /// Calculate the direction with which each ray will be cast out at.
     /// </summary>
-    /// <param name="initialDirection">Direction to be used when calculating other directions
-    /// using the offset angle.</param>
+    /// <param name="initialDirection">Direction at which first ray is cast from.</param>
     /// <returns>An array of directions the cast rays out in.</returns>
     private Vector3[] CalculateDirections(Vector3 initialDirection)
     {
@@ -109,7 +108,7 @@ public class Raycaster : MonoBehaviour
     }
 
     /// <summary>
-    /// Algorithm used to visualize rays.
+    /// Procedure used to obtain the points at which rays intersect objects.
     /// </summary>
     /// <returns>Array of hitpoints representing where rays are in world space.</returns>
     public List<Vector3[]> CalculateHitPoints()
@@ -135,5 +134,4 @@ public class Raycaster : MonoBehaviour
         // Step 5: Return hitpoints.
         return hitPoints;
     }
-
 }

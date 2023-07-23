@@ -1,11 +1,16 @@
 using UnityEngine;
 
 /// <summary>
-/// This class handles the creation and retrieval of child gameobjects.
+/// This class handles the creation and retrieval of child gameobjects used to visualize individual rays.
 /// </summary>
 public class ChildController : MonoBehaviour
 {
-    private GameObject[] childObjects;
+    /* OPTIMIZATION : Make the _childObjects array public with a private set as shown below:
+     * public GameObject[] childObjects { get; private set; } 
+     * 
+     * This would avoid the need for a dedicated getter, decreasing lines of code required to do the same thing.
+     */
+    private GameObject[] _childObjects;
 
     /// <summary>
     /// Create an array of gameobjects and assign them to be a child of the
@@ -14,7 +19,7 @@ public class ChildController : MonoBehaviour
     /// <param name="childCount">How many child objects are to be created.</param>
     public void CreateChildren(int childCount)
     {
-        childObjects = new GameObject[childCount];
+        _childObjects = new GameObject[childCount];
         for (int i = 0; i < childCount; i++)
         {
             // Create an empty object, and give it a name.
@@ -23,12 +28,16 @@ public class ChildController : MonoBehaviour
 
             // Set the childs parent and put it in the array of children.
             childObject.transform.parent = gameObject.transform;
-            childObjects[i] = childObject;
+            _childObjects[i] = childObject;
         }
     }
 
+    /// <summary>
+    /// Get the current array of child objects.
+    /// </summary>
+    /// <returns>An array of GameObjects representing the child objects.</returns>
     public GameObject[] GetChildObjects()
     {
-        return childObjects;
+        return _childObjects;
     }
 }

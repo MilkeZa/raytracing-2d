@@ -2,27 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// A class which controls actions taken by the player and connecting each piece required for the player to function as
+/// expected.
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    // Movement settings
+    // Movement Settings ----------------------------------------------------------------------------------------------
     [Header("Movement")]
     [SerializeField][Range(1f, 10f)] private float _moveSpeed = 10f;
     [SerializeField][Range(1f, 50f)] private float _rotateSpeed = 25f;
 
-    // Raycaster settings
+    // Raycaster Settings ---------------------------------------------------------------------------------------------
     [Header("Raycast Physics")]
     [SerializeField][Range(20f, 180f)] private float _fieldOfView = 90f;
-    private enum RayCount
-    {
-        One, Three, Five, Seven, Nine,
-        Eleven, Thirteen, Fifteen, Seventeen, Nineteen
-    };
+    private enum RayCount { One, Three, Five, Seven, Nine, Eleven, Thirteen, Fifteen, Seventeen, Nineteen };
     [SerializeField] private RayCount _rayCountChoice = RayCount.One;
     private int _rayCount;
 
-    // Ray Visualizer settings
+    // Ray Visualizer Settings ----------------------------------------------------------------------------------------
     [Header("Raycast Visuals")]
     [SerializeField] private Material _rayMaterial;
     private enum RayColor { Black, White, Grey, Red, Green, Blue, Yellow };
@@ -30,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private Color _rayColor = Color.white;
     [SerializeField][Range(0.01f, 0.1f)] private float _rayWidth = 0.05f;
 
-    // Script controllers
+    // Script controllers ---------------------------------------------------------------------------------------------
     private Movement _movementController;
     private Raycaster _raycaster;
     private RayVisualizer _rayVisualizer;
@@ -51,11 +48,9 @@ public class PlayerController : MonoBehaviour
         // Set movement speeds.
         _movementController.SetSpeeds(_moveSpeed, _rotateSpeed);
 
-        // Set ray count and pass along to raycaster.
+        // Set ray count and pass along to raycaster. Then set the ray color and configure the child objects.
         SetRayCount();
         _raycaster.SetVariables(_rayCount, _fieldOfView);
-
-        // Set ray color, then create child objects and configure their line renderers.
         SetRayColor();
         SetChildObjects(_rayCount, _rayWidth, _rayColor, _rayMaterial);
     }
@@ -66,6 +61,9 @@ public class PlayerController : MonoBehaviour
         CastRays();
     }
 
+    /// <summary>
+    /// Set the number of rays cast from the player based on the RayCount value set in the editor.
+    /// </summary>
     private void SetRayCount()
     {
         switch (_rayCountChoice)
@@ -83,6 +81,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the color of the rays cast based on the RayColor value set in the editor.
+    /// </summary>
     private void SetRayColor()
     {
         switch (_rayColorChoice)
@@ -97,6 +98,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Create and assign child objects to the PlayerController. These child objects are responsible for managing the
+    /// ray visuals on screen.
+    /// </summary>
+    /// <param name="rayCount">Number of individual rays being cast.</param>
+    /// <param name="rayWidth">Width of the individual rays being cast.</param>
+    /// <param name="rayColor">Color of the rays being cast.</param>
+    /// <param name="rayMaterial">Material to be assigned to the rays being cast.</param>
     private void SetChildObjects(int rayCount, float rayWidth, Color rayColor, Material rayMaterial)
     {
         // Create the child objects, one child per ray.
@@ -104,19 +113,19 @@ public class PlayerController : MonoBehaviour
 
         // Grab the child objects and add one line renderer component per child.
         GameObject[] childObjects = _childController.GetChildObjects();
-        //_rayVisualizer.SetLineRenderers(_childController.GetChildObjects());
         _rayVisualizer.SetLineRenderers(childObjects);
 
         // Lastly, format the line renderers.
         _rayVisualizer.FormatLineRenderers(rayWidth, rayColor, rayMaterial);
     }
 
+    /// <summary>
+    /// Find the hitpoints for rays being cast and assign those points to the line renderer to be drawn.
+    /// </summary>
     private void CastRays()
     {
-        // Get hitpoints from raycaster.
+        // Get hitpoints from raycaster and pass them along to the ray visualizer to be drawn.
         List<Vector3[]> hitPoints = _raycaster.CalculateHitPoints();
-
-        // Pass hitpoints along to ray visualizer to draw to screen.
         _rayVisualizer.DrawRays(hitPoints);
     }
 }
