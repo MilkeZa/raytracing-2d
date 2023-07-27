@@ -12,9 +12,9 @@ Raytracing-2D is a simple application that contains a basic demonstration of a s
 
 ## Screenshots
 
-![Gameplay](https://github.com/MilkeZa/raytracing-2d/tree/master/Assets/raytracingGameplay.png)
+![Gameplay](https://github.com/MilkeZa/raytracing-2d/tree/master/Assets/Art/Screenshots/raytracingGameplay.png)
 
-![Early version settings](https://github.com/MilkeZa/raytracing-2d/tree/master/Assets/earlyVersionSettings.png)
+![Early version settings](https://github.com/MilkeZa/raytracing-2d/tree/master/Assets/Art/Screenshots/earlyVersionSettings.png)
 
 ## Future Features & Optimizations
 
